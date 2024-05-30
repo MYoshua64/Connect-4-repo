@@ -22,7 +22,7 @@ public class GameGrid : MonoBehaviour, IGrid
         Instance = this;
     }
 
-    public List<int> AvailableCols;
+    public List<int> AvailableCols = new List<int>();
     public bool Match4Found;
     public event Action<int> ColumnClicked;
 
@@ -31,7 +31,6 @@ public class GameGrid : MonoBehaviour, IGrid
 
     private void Start()
     {
-        AvailableCols = new List<int>();
         gridCells = new CellStatus[7, 6];
     }
 
@@ -49,6 +48,7 @@ public class GameGrid : MonoBehaviour, IGrid
     void TurnEnded()
     {
         spawnedDisk.StoppedFalling -= TurnEnded;
+        SFXPlayer.Instance.PlaySFX(SFXType.DiskInserted);
         GameHandler.Instance.EndTurn();
     }
 
@@ -104,7 +104,7 @@ public class GameGrid : MonoBehaviour, IGrid
         //Check Column
         for (int y = row - 3; y <= row + 3 && colCount != 3; y++)
         {
-            if (y < 0 || y > 5 || y == col) continue;
+            if (y < 0 || y > 5 || y == row) continue;
             int x = col;
             if (gridCells[x, y] == centerCell)
             {

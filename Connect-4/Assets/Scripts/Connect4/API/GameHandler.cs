@@ -28,21 +28,14 @@ public class GameHandler : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            DontDestroyOnLoad(gameObject);
-            Instance = this;
-        }
+        Instance = this;
     }
     #endregion
 
     public GameTurn CurrentTurn { get; private set; }
     public GameMode currentGameMode { get; private set; }
     public Action OnTurnSwitch;
+    public Action<GameTurn> OnGameWin; 
 
     [SerializeField] Disk redDiskPrefab;
     [SerializeField] Disk blueDiskPrefab;
@@ -59,11 +52,11 @@ public class GameHandler : MonoBehaviour
         {
             CurrentTurn = (CurrentTurn == GameTurn.BLUE) ? GameTurn.RED : GameTurn.BLUE;
             OnTurnSwitch?.Invoke();
-            Debug.Log(CurrentTurn);
         }
         else //Win condition was met, end the game
         {
-            Debug.Log((CurrentTurn == GameTurn.BLUE) ? "Blue won!" : "Red Won!");
+            SFXPlayer.Instance.PlaySFX(SFXType.Success);
+            OnGameWin?.Invoke(CurrentTurn);
         }
     }
 

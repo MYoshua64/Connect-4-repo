@@ -12,9 +12,6 @@ public class AIPlayer : MonoBehaviour
         Instance = this;
     }
 
-    [SerializeField] Disk redDiskPrefab;
-    [SerializeField] Disk blueDiskPrefab;
-
     public void EnableAI()
     {
         GameHandler.Instance.OnTurnSwitch += CheckIfCanMove;
@@ -38,5 +35,10 @@ public class AIPlayer : MonoBehaviour
     {
         Instance = null;
         Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        GameHandler.Instance.OnTurnSwitch -= CheckIfCanMove;
     }
 }
